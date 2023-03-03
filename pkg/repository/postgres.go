@@ -18,6 +18,7 @@ const (
 	usersTable            = "users"
 	operationsTable       = "operations"
 	materialsTable        = "materials"
+	specialtiesTable      = "specialties"
 	machineTable          = "machine"
 	ordersTable           = "orders"
 	ordersMaterialsTable  = "operations_materials"

@@ -3,6 +3,7 @@ package handler
 import (
 	"errors"
 	"github.com/gin-gonic/gin"
+	"github.com/siruspen/logrus"
 	"net/http"
 	"strings"
 )
@@ -10,6 +11,7 @@ import (
 const (
 	authorizationHeader = "Authorization"
 	userCtx             = "userId"
+	operationCtx        = "id"
 )
 
 func CORSMiddleware() gin.HandlerFunc {
@@ -61,6 +63,24 @@ func getUserId(c *gin.Context) (int, error) {
 	if !ok {
 		newErrorResponse(c, http.StatusInternalServerError, "user id is of invalid type")
 		return 0, errors.New("user id is of invalid type")
+	}
+
+	return idInt, nil
+}
+
+func getOperationId(c *gin.Context) (int, error) {
+	id, ok := c.Get(operationCtx)
+	if !ok {
+		logrus.Printf("Level: repos; func getOperationId(): models.Operation=%v", id)
+
+		//newErrorResponse(c, http.StatusInternalServerError, "operation id not found")
+		return 0, errors.New("operation id not found")
+	}
+
+	idInt, ok := id.(int)
+	if !ok {
+		newErrorResponse(c, http.StatusInternalServerError, "operation id is of invalid type")
+		return 0, errors.New("operation id is of invalid type")
 	}
 
 	return idInt, nil

@@ -9,6 +9,10 @@ type OperationService struct {
 	repo repository.Operation
 }
 
+func (s *OperationService) UpdateOperation(operation *models.Operation) error {
+	return s.repo.UpdateOperation(operation)
+}
+
 func NewOperationService(repo repository.Operation) *OperationService {
 	return &OperationService{repo: repo}
 }
@@ -17,7 +21,7 @@ func (s *OperationService) GetOperationById(operationId int) (models.Operation, 
 	return s.repo.GetOperationById(operationId)
 }
 
-func (s *OperationService) CreateOperation(operation models.Operation) (int, error) {
+func (s *OperationService) CreateOperation(operation *models.Operation) (int, error) {
 	return s.repo.CreateOperation(operation)
 }
 

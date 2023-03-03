@@ -31,7 +31,7 @@ func (h *Handler) InitRoutes() *gin.Engine {
 
 			operations := api.Group("/operations", h.userIdentity)
 			{
-				operations.GET("/get", h.getOperation)
+				operations.GET("/get", h.getOperationById)
 				operations.GET("/get-all", h.getAllOperation)
 				operations.POST("/create", h.createOperation)
 				operations.PUT("/update", h.updateOperation)

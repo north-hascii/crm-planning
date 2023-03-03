@@ -14,7 +14,8 @@ type Authorization interface {
 type Operation interface {
 	GetOperationById(userId int) (models.Operation, error)
 	GetAllOperations() ([]models.Operation, error)
-	CreateOperation(operation models.Operation) (int, error)
+	CreateOperation(operation *models.Operation) (int, error)
+	UpdateOperation(operation *models.Operation) error
 }
 
 type User interface {

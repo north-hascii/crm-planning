@@ -10,18 +10,24 @@ CREATE TABLE users
     status        varchar(255) not null
 );
 
-CREATE TABLE operations
-(
-    id                serial       not null unique,
-    operation_name    varchar(255) not null unique, /* возможно не unique ! */
-    materials_list_id serial       not null,
-    positions_list_id serial       not null
-);
-
 CREATE TABLE materials
 (
     id            serial       not null unique,
     material_name varchar(255) not null unique
+);
+
+CREATE TABLE specialties
+(
+    id             serial       not null unique,
+    specialty_name varchar(255) not null unique
+);
+
+CREATE TABLE operations
+(
+    id                  serial       not null unique,
+    operation_name      varchar(255) not null unique, /* возможно не unique ! */
+    materials_list_id   serial       not null,
+    specialties_list_id serial       not null
 );
 
 CREATE TABLE machines

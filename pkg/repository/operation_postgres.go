@@ -17,7 +17,7 @@ func NewOperationPostgres(db *sqlx.DB) *OperationPostgres {
 
 func (o *OperationPostgres) GetOperationById(userId int) (models.Operation, error) {
 	var operation models.Operation
-	query := fmt.Sprintf("SELECT id, operation_name, materials_list_id, positions_list_id FROM %s WHERE id = $1", operationsTable)
+	query := fmt.Sprintf("SELECT id, operation_name, materials_list_id, specialties_list_id FROM %s WHERE id = $1", operationsTable)
 	err := o.db.Get(&operation, query, userId)
 
 	logrus.Printf("Level: repos; func GetOperationById(): models.Operation=%v", operation)
@@ -27,16 +27,16 @@ func (o *OperationPostgres) GetOperationById(userId int) (models.Operation, erro
 
 func (o *OperationPostgres) GetAllOperations() ([]models.Operation, error) {
 	var operations []models.Operation
-	query := fmt.Sprintf("SELECT id, operation_name, materials_list_id, positions_list_id FROM %s", operationsTable)
+	query := fmt.Sprintf("SELECT id, operation_name, materials_list_id, specialties_list_id FROM %s", operationsTable)
 	err := o.db.Select(&operations, query)
 
 	return operations, err
 }
 
-func (o *OperationPostgres) CreateOperation(operation models.Operation) (int, error) {
+func (o *OperationPostgres) CreateOperation(operation *models.Operation) (int, error) {
 	var id int
-	createOperationQuery := fmt.Sprintf("INSERT INTO %s (operation_name, materials_list_id, positions_list_id) VALUES ($1, $2, $3) RETURNING id", operationsTable)
-	row := o.db.QueryRow(createOperationQuery, operation.OperationName, operation.MaterialsListId, operation.PositionsListId)
+	createOperationQuery := fmt.Sprintf("INSERT INTO %s (operation_name, materials_list_id, specialties_list_id) VALUES ($1, $2, $3) RETURNING id", operationsTable)
+	row := o.db.QueryRow(createOperationQuery, operation.OperationName, operation.MaterialsListId, operation.SpecialtiesListId)
 
 	logrus.Printf("Level: repos; func CreateOperation(): models.Operation=%v", operation)
 
@@ -44,4 +44,18 @@ func (o *OperationPostgres) CreateOperation(operation models.Operation) (int, er
 		return 0, err
 	}
 	return id, nil
+}
+
+func (o *OperationPostgres) UpdateOperation(operation *models.Operation) error {
+	clearOperationQuery := fmt.Sprintf(
+		"UPDATE %s SET operation_name = %s, material_list_id = %d, position_list_id = %d  WHERE user_id = %d",
+		operationsTable,
+		operation.OperationName,
+		operation.MaterialsListId,
+		operation.SpecialtiesListId,
+		operation.Id,
+	)
+
+	_, err := o.db.Exec(clearOperationQuery)
+	return err
 }
