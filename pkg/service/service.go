@@ -11,6 +11,12 @@ type Authorization interface {
 	ParseToken(token string) (int, error)
 }
 
+type Operation interface {
+	GetOperationById(userId int) (models.Operation, error)
+	GetAllOperations() ([]models.Operation, error)
+	CreateOperation(operation models.Operation) (int, error)
+}
+
 type User interface {
 	GetUser(userId int) (models.User, error)
 }
@@ -18,11 +24,13 @@ type User interface {
 type Service struct {
 	Authorization
 	User
+	Operation
 }
 
 func NewService(repos *repository.Repository) *Service {
 	return &Service{
 		Authorization: NewAuthService(repos.Authorization),
 		User:          NewUserService(repos.User),
+		Operation:     NewOperationService(repos.Operation),
 	}
 }
